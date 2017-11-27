@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+DOWNLOAD_PATH="/media/akhil/AkhilData/Music/Downloads"
+cd "$DOWNLOAD_PATH"
+
+#Call as pandoroDownloader songURL artRadio title artist album
+echo Song URL
+echo "$1"
+echo artRadio
+echo "$2"
+echo Title
+echo "$3"
+echo artist
+echo "$4"
+echo album
+echo "$5"
+
+wget "$1" -O "$3 - $4.mp3"
+wget "$2" -O ".tmp.jpg"
+eyeD3 --add-image ".tmp.jpg":FRONT_COVER --title "$3" --artist "$4" --album "$5" "$3 - $4.mp3"
+rm ".tmp.jpg"

@@ -28,6 +28,10 @@ import urllib.parse
 import urllib.request
 from enum import Enum
 
+from pprint import pprint
+import shlex
+import subprocess
+
 import gi
 gi.require_version('Gst', '1.0')
 gi.require_version('GstAudio', '1.0')
@@ -1278,8 +1282,20 @@ class PithosWindow(Gtk.ApplicationWindow):
             self.start_song(self.selected_song().index)
         return playable
 
+    def download_song(self, song):
+        try:
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            command ='nohup '+shlex.quote(dir_path+'/downloadPandora') + ' ' + shlex.quote(song.audioUrlMap['highQuality']['audioUrl']) + ' ' + shlex.quote(
+                song.artRadio) + ' ' + shlex.quote(song.title) + ' ' + shlex.quote(song.artist) + ' ' + shlex.quote(song.album) + ' &'
+            print(command)
+            subprocess.call(command, shell=True)
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+
+
     def love_song(self, *ignore, song=None):
         song = song or self.current_song
+        self.download_song(song=song)
         def callback(l):
             self.update_song_row(song)
             self.emit('metadata-changed', song)
